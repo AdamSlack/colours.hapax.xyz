@@ -36,8 +36,8 @@ function computeColour(frameNum) {
     const rgb = getAverageColour(data)
 
     coloursCtx.beginPath();
-    coloursCtx.lineWidth = 2;
-    
+    coloursCtx.lineWidth = Math.ceil(coloursCanvas.height / video.duration)
+
     coloursCtx.moveTo(0, frameNum*spacing);
     coloursCtx.lineTo(coloursCanvas.width, frameNum*spacing);
 
@@ -62,7 +62,7 @@ video.addEventListener('loadeddata', function() {
 
 video.addEventListener('seeked', function() {
     computeColour(frameNum);
-    frameNum += 1;
+    frameNum += 2;
 
     if (frameNum <= this.duration) {
         this.currentTime = frameNum;
