@@ -2,16 +2,24 @@
 
 <body>
     <div>
-        <video id="video" controls="true" crossorigin="anonymous" />
+        <video id="video" controls="true" crossorigin="anonymous" style="display:none;"/>
     </div>
+    
     <div>
-        <input id="video-selector" type="file" style="width:160px;"/>
+        <input id="video-selector" type="file"/>
     </div>
+
     <div>
-        <canvas id="c1" width="160" height="96"></canvas>
+        <label><input type="radio" name="drawStyle" value="lines" checked/>Draw Lines</label>
+        <label><input type="radio" name="drawStyle" value="circle"/>Draw Circles</label>
     </div>
+    
     <div>
-        <canvas id="c2" width="600" height="1200"></canvas>
+        <canvas id="c1" width="160" height="96" style="display:none;"></canvas>
+    </div>
+    
+    <div>
+        <canvas id="c2" width="600" height="1200" style="display:none;"></canvas>
     </div>
     <script type="text/javascript" src="process-video.js"></script>
 </body>
