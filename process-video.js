@@ -1,6 +1,28 @@
 const frameCanvas = document.getElementById('c1')
 const coloursCanvas = document.getElementById('c2')
 
+function getAverageColour (data) {
+    const length = data.length;
+    const rgb = {r:0, g:0, b:0}
+    
+    let pixelCount = 0
+    let pixelIndex = 0
+
+    while (pixelIndex < length) {
+        rgb.r += data[pixelIndex];
+        rgb.g += data[pixelIndex+1];
+        rgb.b += data[pixelIndex+2];
+        
+        pixelCount++
+        pixelIndex+=4;
+    }
+    
+    rgb.r = Math.floor(rgb.r/pixelCount);
+    rgb.g = Math.floor(rgb.g/pixelCount);
+    rgb.b = Math.floor(rgb.b/pixelCount);
+    return rgb
+}
+
 function computeColour(frameNum) {     
     const frameCtx = frameCanvas.getContext('2d')
     frameCtx.drawImage(video, 0, 0, 220, 150)
@@ -11,27 +33,7 @@ function computeColour(frameNum) {
     const canvasFrame = frameCtx.getImageData(0,0,frameCanvas.width, frameCanvas.height)
     
     const data = canvasFrame.data;
-    const length = data.length;
-
-    const rgb = {r:0, g:0, b:0}
-    
-    let pixelCount = 0
-    let pixelIndex = 0
-
-    while (pixelIndex < length) {
-        
-        rgb.r += data[pixelIndex];
-        rgb.g += data[pixelIndex+1];
-        rgb.b += data[pixelIndex+2];
-        
-        pixelCount++
-        pixelIndex+=4;
-    }
-    
-    // floor the average values to give correct rgb values (ie: round number values)
-    rgb.r = Math.floor(rgb.r/pixelCount);
-    rgb.g = Math.floor(rgb.g/pixelCount);
-    rgb.b = Math.floor(rgb.b/pixelCount);
+    const rgb = getAverageColour(data)
 
     coloursCtx.beginPath();
     coloursCtx.lineWidth = 2;
