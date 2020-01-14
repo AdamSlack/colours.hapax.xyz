@@ -1,5 +1,15 @@
-const frameCanvas = document.getElementById('c1')
-const coloursCanvas = document.getElementById('c2')
+
+const player = document.getElementById('video')
+
+
+const frameCanvas = document.getElementById('frame-canvas')
+const frameCtx = frameCanvas.getContext('2d')
+
+const coloursCanvas = document.getElementById('film-colours-canvas')
+const coloursCtx = coloursCanvas.getContext('2d')
+
+let currentFrameNumber = 0 // filthy tracking of where in the the video the player has seeked to.
+
 let drawStyle = 'lines'
 
 function getDrawStyle () {
@@ -7,20 +17,21 @@ function getDrawStyle () {
     drawStyle = Array.from(radios).find((radio) => radio.checked).value
 }
 
-function getAverageColour (data) {
-    const length = data.length;
+function getAverageColour (dataFrame) {
+    const length = dataFrame.length;
     const rgb = {r:0, g:0, b:0}
     
     let pixelCount = 0
     let pixelIndex = 0
 
     while (pixelIndex < length) {
-        rgb.r += data[pixelIndex];
-        rgb.g += data[pixelIndex+1];
-        rgb.b += data[pixelIndex+2];
+        // dataframe is a 1-d array in order of [r, g, b, a, ..., r, g, b, a, ...]
+        rgb.r += dataFrame[pixelIndex];
+        rgb.g += dataFrame[pixelIndex+1];
+        rgb.b += dataFrame[pixelIndex+2];
         
         pixelCount++
-        pixelIndex+=4;
+        pixelIndex += 4 // next pixels values are +4 ahead
     }
     
     rgb.r = Math.floor(rgb.r/pixelCount);
@@ -50,22 +61,46 @@ function drawCircle(ctx, lineWidth, radius, colour) {
     ctx.stroke();
 }
 
-function computeColour(frameNum) {     
-    const frameCtx = frameCanvas.getContext('2d')
-    frameCtx.drawImage(video, 0, 0, 220, 150)
+function computeColour(frameNumber) {     
 
-    const spacing = coloursCanvas.height/video.duration
-    const coloursCtx = coloursCanvas.getContext('2d')
+    const spacing = coloursCanvas.height/player.duration
 
-    const canvasFrame = frameCtx.getImageData(0,0,frameCanvas.width, frameCanvas.height)
+    const { data: canvasFrameData } = frameCtx.getImageData(0,0,frameCanvas.width, frameCanvas.height)
     
-    const data = canvasFrame.data;
-    const rgb = getAverageColour(data)
+    const rgb = getAverageColour(canvasFrameData)
 
-    const lineWidth = Math.ceil(coloursCanvas.height / video.duration) + 2
+    const lineWidth = Math.ceil(coloursCanvas.height / player.duration) + 2
     
-    if (drawStyle === 'lines') drawLine(coloursCtx, lineWidth, 0, frameNum*spacing, coloursCanvas.width, frameNum*spacing, rgb)
-    if (drawStyle === 'circle') drawCircle(coloursCtx, lineWidth, frameNum*spacing, rgb)
+    if (drawStyle === 'lines') drawLine(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
+    if (drawStyle === 'circle') drawCircle(coloursCtx, lineWidth, frameNumber*spacing, rgb)
+}
+
+function drawPlayerToCanvas () {
+    frameCtx.drawImage(player, 0, 0, 220, 150)
+}
+
+function initialiseProcessing () {
+    getDrawStyle()
+    coloursCanvas.style.display = 'block';
+
+    coloursCtx.fillStyle = "black";
+    coloursCtx.fillRect(0, 0, coloursCanvas.width, coloursCanvas.height);
+    
+    currentFrameNumber = 0
+    player.currentTime = currentFrameNumber
+}
+
+function seekVideo(increment) {
+    currentFrameNumber += increment;
+    if (currentFrameNumber <= player.duration) {
+        player.currentTime = currentFrameNumber;
+    }
+}
+
+function processVideo () {
+        drawPlayerToCanvas()
+        computeColour(currentFrameNumber);
+        seekVideo(2)
 }
 
 function playSelectedFile(event) {
@@ -74,27 +109,5 @@ function playSelectedFile(event) {
 }
 
 document.getElementById('video-selector').onchange = playSelectedFile
-
-
-const player = document.getElementById('video')
-
-let frameNum = 0
-video.addEventListener('loadeddata', function() {
-    getDrawStyle()
-    coloursCanvas.style.display = 'block';
-    const coloursCtx = coloursCanvas.getContext('2d')
-    coloursCtx.fillStyle = "black";
-    coloursCtx.fillRect(0, 0, coloursCanvas.width, coloursCanvas.height);
-    
-    frameNum = 0
-    this.currentTime = frameNum
-})
-
-video.addEventListener('seeked', function() {
-    computeColour(frameNum);
-    frameNum += 2;
-
-    if (frameNum <= this.duration) {
-        this.currentTime = frameNum;
-    }
-});
+player.addEventListener('loadeddata', initialiseProcessing)
+player.addEventListener('seeked', processVideo)
