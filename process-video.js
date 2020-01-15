@@ -51,6 +51,26 @@ function drawLine(ctx, lineWidth, xStart, yStart, xEnd, yEnd, colour) {
     ctx.stroke();
 }
 
+function drawFunky(ctx, lineWidth, xStart, yStart, xEnd, yEnd, colour) {
+    ctx.beginPath();
+    ctx.lineWidth = lineWidth
+
+    ctx.moveTo(xStart, yStart)
+    ctx.lineTo(xStart + 40, yStart)
+    ctx.lineTo(xStart + 50, yStart + 20)
+    ctx.lineTo(xStart + 60, yStart - 20)
+    ctx.lineTo(xStart + 70, yStart)
+    ctx.lineTo(xStart + 510, yStart)
+    ctx.lineTo(xStart + 520, yStart-20)
+    ctx.lineTo(xStart + 530, yStart+20)
+    ctx.lineTo(xStart + 540, yStart)
+
+    ctx.lineTo(xEnd, yEnd);
+
+    ctx.strokeStyle = `rgb(${colour.r},${colour.g},${colour.b})`
+    ctx.stroke();
+}
+
 function drawCircle(ctx, lineWidth, radius, colour) {
     ctx.beginPath();
     
@@ -72,6 +92,7 @@ function computeColour(frameNumber) {
     const lineWidth = Math.ceil(coloursCanvas.height / player.duration) + 2
     
     if (drawStyle === 'lines') drawLine(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
+    if (drawStyle === 'funky') drawFunky(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
     if (drawStyle === 'circle') drawCircle(coloursCtx, lineWidth, frameNumber*spacing, rgb)
 }
 
