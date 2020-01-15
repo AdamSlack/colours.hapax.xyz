@@ -9,21 +9,23 @@
         <h2>Select Video</h2>
         <input id="video-selector" type="file"/>
         <h2>Style</h2>
-        <label><input type="radio" name="drawStyle" value="lines"/>Draw Lines</label>
-        <label><input type="radio" name="drawStyle" value="circle" checked/>Draw Circles</label><br>
+        <label style="margin: 1em;"><input type="radio" name="drawStyle" value="lines"/>Draw Lines</label>
+        <label style="margin: 1em;"><input type="radio" name="drawStyle" value="circle" checked/>Draw Circles</label><br>
         <!-- <label><input type="radio" name="drawStyle" value="funky" checked/>Draw Funky</label> -->
         <h2>Size</h2>
-        <label><input type="number" value="800" id="canvasHeight"/>Height</label><br>
-        <label><input type="number" value="600" id="canvasWidth"/>Width</label><br>
+        <label style="margin: 1em;"><input type="number" value="800" id="canvasHeight"/>Height</label><br>
+        <label style="margin: 1em;"><input type="number" value="600" id="canvasWidth"/>Width</label><br>
 
         <h2>Background Colour</h2>
-        <label><input type="number" value="0"/>Red</label>
-        <label><input type="number" value="0"/>Green</label>
-        <label><input type="number" value="0"/>Blue</label><br>
+        <label style="margin: 1em;"><input type="number" value="0" max="255" min="0" id="bgRed"/>Red</label>
+        <label style="margin: 1em;"><input type="number" value="0" max="255" min="0" id="bgGreen"/>Green</label>
+        <label style="margin: 1em;"><input type="number" value="0" max="255" min="0" id="bgBlue"/>Blue</label><br>
         
-        <h2>Style</h2>
-        <label><input type="number" value="12"/>Line Thickness</label><br>
-        <label><input type="number" value="2"/>Polling Rate</label><br>
+        <h2>Spacings</h2>
+        <label style="margin: 1em;"><input type="number" value="12" min="1" id="lineWidth"/>Line Width</label>
+        <label style="margin: 1em;"><input type="number" value="2" min="1" id="pollingRate"/>Polling Rate</label><br>
+
+        <button style="margin: 1em;" id="startButton">Begin!</button>
     </div>
     
     <div>

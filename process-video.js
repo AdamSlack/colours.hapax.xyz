@@ -81,15 +81,13 @@ function drawCircle(ctx, lineWidth, radius, colour) {
     ctx.stroke();
 }
 
-function computeColour(frameNumber) {     
+function computeColour(frameNumber, lineWidth) {     
 
     const spacing = coloursCanvas.height/player.duration
     const radius = Math.sqrt(Math.pow(coloursCanvas.height, 2) + Math.pow(coloursCanvas.width,2))/player.duration
     const { data: canvasFrameData } = frameCtx.getImageData(0,0,frameCanvas.width, frameCanvas.height)
     
     const rgb = getAverageColour(canvasFrameData)
-
-    const lineWidth = Math.ceil(coloursCanvas.height / player.duration) + 2
     
     if (drawStyle === 'lines') drawLine(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
     if (drawStyle === 'circle') drawCircle(coloursCtx, lineWidth, frameNumber*radius, rgb)
@@ -103,14 +101,20 @@ function drawPlayerToCanvas () {
 function initialiseProcessing () {
     setCanvasHeight()
     setCanvasWidth()
+    setPollingRate()
+    setLineWidth()
     getDrawStyle()
     coloursCanvas.style.display = 'block';
 
-    coloursCtx.fillStyle = "black";
+    coloursCtx.fillStyle = getBackgroundColour();
     coloursCtx.fillRect(0, 0, coloursCanvas.width, coloursCanvas.height);
     
     currentFrameNumber = 0
     player.currentTime = currentFrameNumber
+}
+
+function setStartTrigger () {
+    document.getElementById('startButton').addEventListener('click', initialiseProcessing)
 }
 
 function seekVideo(increment) {
@@ -120,10 +124,12 @@ function seekVideo(increment) {
     }
 }
 
+let LINE_WIDTH = 12
+let POLLING_RATE = 2
 function processVideo () {
         drawPlayerToCanvas()
-        computeColour(currentFrameNumber);
-        seekVideo(2)
+        computeColour(currentFrameNumber, LINE_WIDTH);
+        seekVideo(POLLING_RATE)
 }
 
 function playSelectedFile(event) {
@@ -132,7 +138,7 @@ function playSelectedFile(event) {
 }
 
 document.getElementById('video-selector').onchange = playSelectedFile
-player.addEventListener('loadeddata', initialiseProcessing)
+player.addEventListener('loadeddata', setStartTrigger)
 player.addEventListener('seeked', processVideo)
 
 
@@ -144,4 +150,19 @@ function setCanvasHeight () {
 function setCanvasWidth () {
     const width = document.getElementById('canvasWidth').value
     coloursCanvas.width = width
+}
+
+function getBackgroundColour () {
+    const red = document.getElementById('bgRed').value
+    const green = document.getElementById('bgGreen').value
+    const blue = document.getElementById('bgBlue').value
+    return `rgb(${red}, ${green}, ${blue})`
+}
+
+function setPollingRate () {
+    POLLING_RATE = parseInt(document.getElementById('pollingRate').value, 10)
+}
+
+function setLineWidth () {
+    LINE_WIDTH = parseInt(document.getElementById('lineWidth').value, 10)
 }
