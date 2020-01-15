@@ -51,25 +51,25 @@ function drawLine(ctx, lineWidth, xStart, yStart, xEnd, yEnd, colour) {
     ctx.stroke();
 }
 
-function drawFunky(ctx, lineWidth, xStart, yStart, xEnd, yEnd, colour) {
-    ctx.beginPath();
-    ctx.lineWidth = lineWidth
+// function drawFunky(ctx, lineWidth, xStart, yStart, xEnd, yEnd, colour) {
+//     ctx.beginPath();
+//     ctx.lineWidth = lineWidth
 
-    ctx.moveTo(xStart, yStart)
-    ctx.lineTo(xStart + 40, yStart)
-    ctx.lineTo(xStart + 50, yStart + 20)
-    ctx.lineTo(xStart + 60, yStart - 20)
-    ctx.lineTo(xStart + 70, yStart)
-    ctx.lineTo(xStart + 510, yStart)
-    ctx.lineTo(xStart + 520, yStart-20)
-    ctx.lineTo(xStart + 530, yStart+20)
-    ctx.lineTo(xStart + 540, yStart)
+//     ctx.moveTo(xStart, yStart)
+//     ctx.lineTo(xStart + 40, yStart)
+//     ctx.lineTo(xStart + 50, yStart + 20)
+//     ctx.lineTo(xStart + 60, yStart - 20)
+//     ctx.lineTo(xStart + 70, yStart)
+//     ctx.lineTo(xStart + 510, yStart)
+//     ctx.lineTo(xStart + 520, yStart-20)
+//     ctx.lineTo(xStart + 530, yStart+20)
+//     ctx.lineTo(xStart + 540, yStart)
 
-    ctx.lineTo(xEnd, yEnd);
+//     ctx.lineTo(xEnd, yEnd);
 
-    ctx.strokeStyle = `rgb(${colour.r},${colour.g},${colour.b})`
-    ctx.stroke();
-}
+//     ctx.strokeStyle = `rgb(${colour.r},${colour.g},${colour.b})`
+//     ctx.stroke();
+// }
 
 function drawCircle(ctx, lineWidth, radius, colour) {
     ctx.beginPath();
@@ -84,7 +84,7 @@ function drawCircle(ctx, lineWidth, radius, colour) {
 function computeColour(frameNumber) {     
 
     const spacing = coloursCanvas.height/player.duration
-
+    const radius = Math.sqrt(Math.pow(coloursCanvas.height, 2) + Math.pow(coloursCanvas.width,2))/player.duration
     const { data: canvasFrameData } = frameCtx.getImageData(0,0,frameCanvas.width, frameCanvas.height)
     
     const rgb = getAverageColour(canvasFrameData)
@@ -92,8 +92,8 @@ function computeColour(frameNumber) {
     const lineWidth = Math.ceil(coloursCanvas.height / player.duration) + 2
     
     if (drawStyle === 'lines') drawLine(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
-    if (drawStyle === 'funky') drawFunky(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
-    if (drawStyle === 'circle') drawCircle(coloursCtx, lineWidth, frameNumber*spacing, rgb)
+    if (drawStyle === 'circle') drawCircle(coloursCtx, lineWidth, frameNumber*radius, rgb)
+    // if (drawStyle === 'funky') drawFunky(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
 }
 
 function drawPlayerToCanvas () {
@@ -101,6 +101,8 @@ function drawPlayerToCanvas () {
 }
 
 function initialiseProcessing () {
+    setCanvasHeight()
+    setCanvasWidth()
     getDrawStyle()
     coloursCanvas.style.display = 'block';
 
@@ -132,3 +134,14 @@ function playSelectedFile(event) {
 document.getElementById('video-selector').onchange = playSelectedFile
 player.addEventListener('loadeddata', initialiseProcessing)
 player.addEventListener('seeked', processVideo)
+
+
+function setCanvasHeight () {
+    const height = document.getElementById('canvasHeight').value
+    coloursCanvas.height = height
+}
+
+function setCanvasWidth () {
+    const width = document.getElementById('canvasWidth').value
+    coloursCanvas.width = width
+}
