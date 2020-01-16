@@ -12,6 +12,9 @@ let currentFrameNumber = 0 // filthy tracking of where in the the video the play
 
 let drawStyle = 'lines'
 
+let radius
+let spacing
+
 function getDrawStyle () {
     const radios = document.getElementsByName('drawStyle')
     drawStyle = Array.from(radios).find((radio) => radio.checked).value
@@ -51,26 +54,6 @@ function drawLine(ctx, lineWidth, xStart, yStart, xEnd, yEnd, colour) {
     ctx.stroke();
 }
 
-// function drawFunky(ctx, lineWidth, xStart, yStart, xEnd, yEnd, colour) {
-//     ctx.beginPath();
-//     ctx.lineWidth = lineWidth
-
-//     ctx.moveTo(xStart, yStart)
-//     ctx.lineTo(xStart + 40, yStart)
-//     ctx.lineTo(xStart + 50, yStart + 20)
-//     ctx.lineTo(xStart + 60, yStart - 20)
-//     ctx.lineTo(xStart + 70, yStart)
-//     ctx.lineTo(xStart + 510, yStart)
-//     ctx.lineTo(xStart + 520, yStart-20)
-//     ctx.lineTo(xStart + 530, yStart+20)
-//     ctx.lineTo(xStart + 540, yStart)
-
-//     ctx.lineTo(xEnd, yEnd);
-
-//     ctx.strokeStyle = `rgb(${colour.r},${colour.g},${colour.b})`
-//     ctx.stroke();
-// }
-
 function drawCircle(ctx, lineWidth, radius, colour) {
     ctx.beginPath();
 
@@ -81,17 +64,13 @@ function drawCircle(ctx, lineWidth, radius, colour) {
     ctx.stroke();
 }
 
-function computeColour(frameNumber, lineWidth) {
-
-    const spacing = coloursCanvas.height/player.duration
-    const radius = Math.sqrt(Math.pow(coloursCanvas.height, 2) + Math.pow(coloursCanvas.width,2))/player.duration
+const computeColour = (frameNumber, lineWidth) => {
     const { data: canvasFrameData } = frameCtx.getImageData(0,0,frameCanvas.width, frameCanvas.height)
 
     const rgb = getAverageColour(canvasFrameData)
 
     if (drawStyle === 'lines') drawLine(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
     if (drawStyle === 'circle') drawCircle(coloursCtx, lineWidth, frameNumber*radius, rgb)
-    // if (drawStyle === 'funky') drawFunky(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
 }
 
 function drawPlayerToCanvas () {
@@ -105,6 +84,9 @@ function initialiseProcessing () {
     setLineWidth()
     getDrawStyle()
     coloursCanvas.style.display = 'block';
+
+    spacing = coloursCanvas.height/player.duration
+    radius = Math.sqrt(Math.pow(coloursCanvas.height, 2) + Math.pow(coloursCanvas.width,2))/player.duration
 
     coloursCtx.fillStyle = getBackgroundColour();
     coloursCtx.fillRect(0, 0, coloursCanvas.width, coloursCanvas.height);
@@ -126,10 +108,10 @@ function seekVideo(increment) {
 
 let LINE_WIDTH = 12
 let POLLING_RATE = 2
-function processVideo () {
-        drawPlayerToCanvas()
-        computeColour(currentFrameNumber, LINE_WIDTH);
-        seekVideo(POLLING_RATE)
+const processVideo = () => {
+    drawPlayerToCanvas()
+    computeColour(currentFrameNumber, LINE_WIDTH);
+    seekVideo(POLLING_RATE)
 }
 
 function playSelectedFile(event) {
