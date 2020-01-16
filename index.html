@@ -4,7 +4,7 @@
     <div>
         <video id="video" controls="true" crossorigin="anonymous" style="display:none;"/>
     </div>
-    
+
     <div>
         <h2>Select Video</h2>
         <input id="video-selector" type="file"/>
@@ -15,23 +15,24 @@
         <h2>Size</h2>
         <label style="margin: 1em;"><input type="number" value="800" id="canvasHeight"/>Height</label><br>
         <label style="margin: 1em;"><input type="number" value="600" id="canvasWidth"/>Width</label><br>
+        <button style="margin: 1em;" id="screen-resolution">Use Screen Resolution</button>
 
         <h2>Background Colour</h2>
         <label style="margin: 1em;"><input type="number" value="0" max="255" min="0" id="bgRed"/>Red</label>
         <label style="margin: 1em;"><input type="number" value="0" max="255" min="0" id="bgGreen"/>Green</label>
         <label style="margin: 1em;"><input type="number" value="0" max="255" min="0" id="bgBlue"/>Blue</label><br>
-        
+
         <h2>Spacings</h2>
         <label style="margin: 1em;"><input type="number" value="12" min="1" id="lineWidth"/>Line Width</label>
         <label style="margin: 1em;"><input type="number" value="2" min="1" id="pollingRate"/>Polling Rate</label><br>
 
         <button style="margin: 1em;" id="startButton">Begin!</button>
     </div>
-    
+
     <div>
         <canvas id="frame-canvas" width="160" height="96" style="display:none;"></canvas>
     </div>
-    
+
     <div>
         <canvas id="film-colours-canvas" width="600" height="800" style="display:none;"></canvas>
     </div>

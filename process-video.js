@@ -20,7 +20,7 @@ function getDrawStyle () {
 function getAverageColour (dataFrame) {
     const length = dataFrame.length;
     const rgb = {r:0, g:0, b:0}
-    
+
     let pixelCount = 0
     let pixelIndex = 0
 
@@ -29,11 +29,11 @@ function getAverageColour (dataFrame) {
         rgb.r += dataFrame[pixelIndex];
         rgb.g += dataFrame[pixelIndex+1];
         rgb.b += dataFrame[pixelIndex+2];
-        
+
         pixelCount++
         pixelIndex += 4 // next pixels values are +4 ahead
     }
-    
+
     rgb.r = Math.floor(rgb.r/pixelCount);
     rgb.g = Math.floor(rgb.g/pixelCount);
     rgb.b = Math.floor(rgb.b/pixelCount);
@@ -73,22 +73,22 @@ function drawLine(ctx, lineWidth, xStart, yStart, xEnd, yEnd, colour) {
 
 function drawCircle(ctx, lineWidth, radius, colour) {
     ctx.beginPath();
-    
+
     ctx.lineWidth = lineWidth
     ctx.arc(0, 0, radius, 0, 2 * Math.PI);
-    
+
     ctx.strokeStyle = `rgb(${colour.r},${colour.g},${colour.b})`
     ctx.stroke();
 }
 
-function computeColour(frameNumber, lineWidth) {     
+function computeColour(frameNumber, lineWidth) {
 
     const spacing = coloursCanvas.height/player.duration
     const radius = Math.sqrt(Math.pow(coloursCanvas.height, 2) + Math.pow(coloursCanvas.width,2))/player.duration
     const { data: canvasFrameData } = frameCtx.getImageData(0,0,frameCanvas.width, frameCanvas.height)
-    
+
     const rgb = getAverageColour(canvasFrameData)
-    
+
     if (drawStyle === 'lines') drawLine(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
     if (drawStyle === 'circle') drawCircle(coloursCtx, lineWidth, frameNumber*radius, rgb)
     // if (drawStyle === 'funky') drawFunky(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
@@ -108,7 +108,7 @@ function initialiseProcessing () {
 
     coloursCtx.fillStyle = getBackgroundColour();
     coloursCtx.fillRect(0, 0, coloursCanvas.width, coloursCanvas.height);
-    
+
     currentFrameNumber = 0
     player.currentTime = currentFrameNumber
 }
@@ -140,6 +140,13 @@ function playSelectedFile(event) {
 document.getElementById('video-selector').onchange = playSelectedFile
 player.addEventListener('loadeddata', setStartTrigger)
 player.addEventListener('seeked', processVideo)
+
+document.getElementById('screen-resolution').onclick = () => {
+    const resWidth = window.screen.width * window.devicePixelRatio
+    const resHeight = window.screen.height * window.devicePixelRatio
+    document.getElementById('canvasWidth').value = resWidth
+    document.getElementById('canvasHeight').value = resHeight
+}
 
 
 function setCanvasHeight () {
