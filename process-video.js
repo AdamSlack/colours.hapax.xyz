@@ -111,7 +111,7 @@ function initialiseProcessing () {
     coloursCtx.fillStyle = getBackgroundColour();
     coloursCtx.fillRect(0, 0, coloursCanvas.width, coloursCanvas.height);
 
-    coloursCtx.translate(coloursCanvas.width / 2, coloursCanvas.height / 2);
+    if (drawStyle === 'fan') coloursCtx.translate(coloursCanvas.width / 2, coloursCanvas.height / 2);
 
     currentFrameNumber = 0
     player.currentTime = currentFrameNumber
