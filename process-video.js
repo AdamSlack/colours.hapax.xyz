@@ -171,9 +171,9 @@ function getBackgroundColour () {
 }
 
 function setPollingRate () {
-    POLLING_RATE = parseInt(document.getElementById('pollingRate').value, 10)
+    POLLING_RATE = parseFloat(document.getElementById('pollingRate').value, 10)
 }
 
 function setLineWidth () {
-    LINE_WIDTH = parseInt(document.getElementById('lineWidth').value, 10)
+    LINE_WIDTH = parseFloat(document.getElementById('lineWidth').value, 10)
 }
