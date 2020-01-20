@@ -14,6 +14,7 @@ let drawStyle = 'lines'
 
 let radius
 let spacing
+let angleSpacing
 
 function getDrawStyle () {
     const radios = document.getElementsByName('drawStyle')
@@ -64,6 +65,23 @@ function drawCircle(ctx, lineWidth, radius, colour) {
     ctx.stroke();
 }
 
+const drawFanSegment = (ctx, lineWidth, frameNumber, colour) => {
+    const angle = frameNumber * angleSpacing
+    const nextAngle = (frameNumber + POLLING_RATE) * angleSpacing
+    const segmentLength = Math.max(coloursCanvas.height, coloursCanvas.width)
+
+    ctx.fillStyle = `rgb(${colour.r},${colour.g},${colour.b})`
+    ctx.strokeStyle = `rgb(${colour.r},${colour.g},${colour.b})`
+    ctx.lineWidth = lineWidth
+    ctx.beginPath()
+    ctx.moveTo(0, 0)
+    console.log(Math.sin(angle) * segmentLength , - Math.cos(angle) * segmentLength)
+    ctx.lineTo(Math.sin(angle) * segmentLength , - Math.cos(angle) * segmentLength)
+    ctx.lineTo(Math.sin(nextAngle) * segmentLength, - Math.cos(nextAngle) * segmentLength)
+    ctx.fill()
+    ctx.stroke()
+}
+
 const computeColour = (frameNumber, lineWidth) => {
     const { data: canvasFrameData } = frameCtx.getImageData(0,0,frameCanvas.width, frameCanvas.height)
 
@@ -71,6 +89,7 @@ const computeColour = (frameNumber, lineWidth) => {
 
     if (drawStyle === 'lines') drawLine(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
     if (drawStyle === 'circle') drawCircle(coloursCtx, lineWidth, frameNumber*radius, rgb)
+    if (drawStyle === 'fan') drawFanSegment(coloursCtx, lineWidth, frameNumber, rgb)
 }
 
 function drawPlayerToCanvas () {
@@ -85,11 +104,14 @@ function initialiseProcessing () {
     getDrawStyle()
     coloursCanvas.style.display = 'block';
 
+    angleSpacing = (Math.PI * 2) / player.duration
     spacing = coloursCanvas.height/player.duration
     radius = Math.sqrt(Math.pow(coloursCanvas.height, 2) + Math.pow(coloursCanvas.width,2))/player.duration
 
     coloursCtx.fillStyle = getBackgroundColour();
     coloursCtx.fillRect(0, 0, coloursCanvas.width, coloursCanvas.height);
+
+    if (drawStyle === 'fan') coloursCtx.translate(coloursCanvas.width / 2, coloursCanvas.height / 2);
 
     currentFrameNumber = 0
     player.currentTime = currentFrameNumber
