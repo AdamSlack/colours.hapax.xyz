@@ -3,6 +3,10 @@ Creates an image consisting of Lines or Rings with each being coloured as the av
 
 You could make your own on [film-colours.hapax.xyz](http://film-colours.hapax.xyz)
 
+## Current UI
+
+<img src="https://github.com/AdamSlack/video-colour-slices/blob/master/ui-screenshot.png?raw=true" width="500">
+
 ## Examples
 
 ### Big Buck Bunny
