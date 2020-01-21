@@ -2,7 +2,7 @@
   "name": "video-colour-slices",
   "version": "1.0.0",
   "description": "Creates an image consisting of Lines or Rings with each being coloured as the average colour of a frame in a provided video",
-  "main": "process-video.js",
+  "main": "index.html",
   "directories": {
     "example": "examples"
   },
@@ -13,8 +13,8 @@
     "type": "git",
     "url": "git+https://github.com/AdamSlack/video-colour-slices.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Adam Slack",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/AdamSlack/video-colour-slices/issues"
   },
