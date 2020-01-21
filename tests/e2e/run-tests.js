@@ -11,7 +11,9 @@ createTestCafe('localhost', 1337, 1338)
         return runner
 			.src([
                 './tests/e2e/page-layout.test.js',
-                './tests/e2e/generating-circles.test.js'
+                './tests/e2e/generating-circles.test.js',
+                './tests/e2e/generating-lines.test.js',
+                './tests/e2e/generating-fans.test.js'
             ])
             .browsers(['chrome'])
             .reporter('list')
