@@ -15,11 +15,14 @@ createTestCafe('localhost', 1337, 1338)
                 './tests/e2e/generating-lines.test.js',
                 './tests/e2e/generating-fans.test.js'
             ])
-            .browsers(['chrome'])
+            .screenshots({
+                path: 'reports/screenshots',
+                takeOnFails: true
+            })
+            .browsers(['firefox:headless'])
             .reporter('list')
             .run();
     })
-    .then(failedCount => {
-        console.log('Tests failed: ' + failedCount);
+    .then(() => {
         testcafe.close();
     })
