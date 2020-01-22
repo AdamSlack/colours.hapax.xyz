@@ -3,7 +3,7 @@ jobs:
   build:
 
     docker:
-      - image: circleci/node:jessie-browsers
+      - image: circleci/node:12.9.1-buster-browsers
 
     working_directory: ~/repo
 
