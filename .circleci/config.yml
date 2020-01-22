@@ -3,7 +3,7 @@ jobs:
   build:
 
     docker:
-      - image: circleci/node:10.8.0
+      - image: circleci/node:jessie-browsers
 
     working_directory: ~/repo
 
