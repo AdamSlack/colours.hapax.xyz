@@ -34,7 +34,7 @@ test('Colour canvas should have been generated', async (t) => {
         .typeText(heightInputSel, '50')
         
         .click(startButtonSel)
-        .wait(2000)
+        .wait(10000)
 
     const canvasBase64 = await getCanvaseBase64()
     await t.expect(canvasBase64).eql(expectedCanvas.linesBase64)
