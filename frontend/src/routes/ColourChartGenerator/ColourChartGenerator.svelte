@@ -11,6 +11,7 @@
     let colourValues
     let backgroundColour 
 	let selectedFile
+	let computedColours
 
 	const selectColour = (rgba) => {
         colourValues = JSON.stringify(rgba.detail, null, 2);
@@ -22,8 +23,8 @@
         selectedFile = URL.createObjectURL(file)
     }
 
-    const beginProcessing = () => {
-        startProcessing({
+    const beginProcessing = async () => {
+        computedColours = await startProcessing({
             canvasHeight,
             canvasWidth,
             pollingRate,
@@ -31,7 +32,8 @@
             backgroundColour,
             selectedFile,
             drawStyle: selectedDisplayStyle,
-        })
+		})
+		console.log(computedColours)
     }
 
     const matchScreenResolution = () => {

@@ -12,6 +12,7 @@ let DRAW_STYLE = 'lines'
 let radius
 let spacing
 let angleSpacing
+let computedColours
 
 function getAverageColour (dataFrame) {
     const length = dataFrame.length;
@@ -77,6 +78,7 @@ const computeColour = (frameNumber, lineWidth) => {
     const { data: canvasFrameData } = frameCtx.getImageData(0,0,frameCanvas.width, frameCanvas.height)
 
     const rgb = getAverageColour(canvasFrameData)
+    computedColours.push(rgb)
     if (DRAW_STYLE === 'lines') drawLine(coloursCtx, lineWidth, 0, frameNumber*spacing, coloursCanvas.width, frameNumber*spacing, rgb)
     if (DRAW_STYLE === 'circle') drawCircle(coloursCtx, lineWidth, frameNumber*radius, rgb)
     if (DRAW_STYLE === 'radial') drawFanSegment(coloursCtx, lineWidth, frameNumber, rgb)
@@ -90,53 +92,60 @@ function setDrawStyle({drawStyle}) {
     DRAW_STYLE = drawStyle
 }
 
-export function startProcessing (params) {
-    player = document.getElementById('video')
-    player.addEventListener('loadeddata', () => {
-        player.addEventListener('seeked', processVideo)
+export const startProcessing = (params) => {
+    return new Promise((resolve) => {
+        const resolver = () => resolve(computedColours)
+        player = document.getElementById('video')
+        player.addEventListener('loadeddata', () => {
+            player.addEventListener('seeked', () => processVideo(resolve))
+            
+            frameCanvas = document.getElementById('frame-canvas')
+            frameCtx = frameCanvas.getContext('2d')
+            coloursCanvas = document.getElementById('film-colours-canvas')
+            coloursCtx = coloursCanvas.getContext('2d')
+            
+            computedColours = []
+            setCanvasHeight(params)
+            setCanvasWidth(params)
+            setPollingRate(params)
+            setLineWidth(params)
+            setDrawStyle(params)
+            coloursCanvas.style.display = 'block';
+            
+            angleSpacing = (Math.PI * 2) / player.duration
+            spacing = coloursCanvas.height/player.duration
+            radius = Math.sqrt(Math.pow(coloursCanvas.height, 2) + Math.pow(coloursCanvas.width,2))/player.duration
+            
+            coloursCtx.fillStyle = getBackgroundColour(params.backgroundColour);
+            coloursCtx.fillRect(0, 0, coloursCanvas.width, coloursCanvas.height);
+            
+            if (DRAW_STYLE === 'radial') coloursCtx.translate(coloursCanvas.width / 2, coloursCanvas.height / 2);
+            
+            currentFrameNumber = 0
+            player.currentTime = currentFrameNumber
         
-        frameCanvas = document.getElementById('frame-canvas')
-        frameCtx = frameCanvas.getContext('2d')
-        coloursCanvas = document.getElementById('film-colours-canvas')
-        coloursCtx = coloursCanvas.getContext('2d')
-
-        setCanvasHeight(params)
-        setCanvasWidth(params)
-        setPollingRate(params)
-        setLineWidth(params)
-        setDrawStyle(params)
-        coloursCanvas.style.display = 'block';
-
-        angleSpacing = (Math.PI * 2) / player.duration
-        spacing = coloursCanvas.height/player.duration
-        radius = Math.sqrt(Math.pow(coloursCanvas.height, 2) + Math.pow(coloursCanvas.width,2))/player.duration
-
-        coloursCtx.fillStyle = getBackgroundColour(params.backgroundColour);
-        coloursCtx.fillRect(0, 0, coloursCanvas.width, coloursCanvas.height);
-
-        if (DRAW_STYLE === 'radial') coloursCtx.translate(coloursCanvas.width / 2, coloursCanvas.height / 2);
-
-        currentFrameNumber = 0
-        player.currentTime = currentFrameNumber
-        processVideo()
+            processVideo(resolver)
+        })
+        player.src = params.selectedFile
     })
-    player.src = params.selectedFile
 }
 
-function seekVideo(increment) {
+const seekVideo = (increment, resolve) => {
     currentFrameNumber += increment;
     if (currentFrameNumber <= player.duration) {
         player.currentTime = currentFrameNumber;
+    }
+    else {
+        resolve(computedColours)
     }
 }
 
 let LINE_WIDTH = 12
 let POLLING_RATE = 2
-export const processVideo = () => {
-    console.log('Processing Video')
+export const processVideo = (resolve) => {
     drawPlayerToCanvas()
     computeColour(currentFrameNumber, LINE_WIDTH);
-    seekVideo(POLLING_RATE)
+    seekVideo(POLLING_RATE, resolve)
 }
 
 function setCanvasHeight ({canvasHeight}) {

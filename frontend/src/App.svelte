@@ -1,11 +1,13 @@
 <script>
 	import Router, { link } from 'svelte-spa-router'
 	import ColourChartGenerator from './routes/ColourChartGenerator/ColourChartGenerator.svelte'
+	import ColourCharts from './routes/ColourCharts/ColourCharts.svelte'
 	import Home from './routes/Home/Home.svelte'
 
 	const routes = {
 		'/': Home,
-		'/ColourChartGenerator': ColourChartGenerator
+		'/ColourChartGenerator': ColourChartGenerator,
+		'/ColourCharts': ColourCharts
 	}
 </script>
 

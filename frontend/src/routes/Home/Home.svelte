@@ -6,7 +6,7 @@
 </section>
 <section>
     <a href="/ColourChartGenerator" use:link>Create Colour Chart</a>
-    <a href="">View Colour Charts</a>
+    <a href="/ColourCharts" use:link>View Colour Charts</a>
 </section>
 
 <style>
