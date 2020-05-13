@@ -1,10 +1,17 @@
 <script>
-	import ColourChartGenerator from './ColourChartGenerator.svelte'
+	import Router, { link } from 'svelte-spa-router'
+	import ColourChartGenerator from './routes/ColourChartGenerator/ColourChartGenerator.svelte'
+	import Home from './routes/Home/Home.svelte'
+
+	const routes = {
+		'/': Home,
+		'/ColourChartGenerator': ColourChartGenerator
+	}
 </script>
 
 <main>
-	<h1>🎨 Colour Charts 🖼</h1>
-	<ColourChartGenerator/>
+	<h1><a href="/" use:link>🎨 Colour Charts 🖼</a></h1>
+	<Router {routes}/>
 </main>
 
 
@@ -20,6 +27,11 @@
 		text-transform: uppercase;
 		font-size: 4em;
 		font-weight: 100;
+	}
+
+	h1 a {
+		text-decoration: none;
+		color: #ff3e00;
 	}
 
 	@media (min-width: 640px) {

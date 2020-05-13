@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "sirv-cli": "^0.4.4",
-    "svelte-color-picker": "^1.0.7"
+    "svelte-color-picker": "^1.0.7",
+    "svelte-spa-router": "^2.1.0"
   }
 }

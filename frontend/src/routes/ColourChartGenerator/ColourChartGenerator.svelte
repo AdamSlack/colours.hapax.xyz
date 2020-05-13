@@ -3,9 +3,9 @@
     import { startProcessing } from './ColourChartGenerator'
 
 	let canvasHeight = 800
-	let canvasWidth = 800
-	let lineThickness = 10
-	let pollingRate = 10
+	let canvasWidth = 600
+	let lineThickness = 12
+	let pollingRate = 2
 	let displayStyles = ["radial", "circle", "lines"]
 	let selectedDisplayStyle = "circle"
     let colourValues
