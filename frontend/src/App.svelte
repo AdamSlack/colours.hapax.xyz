@@ -14,6 +14,7 @@
 <main>
 	<h1><a href="/" use:link>🎨 Colour Charts 🖼</a></h1>
 	<Router {routes}/>
+	
 </main>
 
 
@@ -37,7 +38,7 @@
 
 	@media (min-width: 640px) {
 		main {
-		max-width: none;
+			max-width: none;
 		}
 	}
 </style> 	

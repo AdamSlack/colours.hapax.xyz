@@ -9,6 +9,14 @@
     <a href="/ColourChartGenerator" use:link>Create Colour Chart</a>
     <a href="/ColourCharts" use:link>View Colour Charts</a>
 </section>
+<div class="footer">
+		<a href="https://github.com/AdamSlack/video-colour-slices/" target="_blank">
+			<img src="https://octodex.github.com/images/constructocat2.jpg" alt="octocat">
+		</a>
+		<a href="https://github.com/AdamSlack/video-colour-slices/" target="_blank">
+			View On GitHub
+		</a>
+	</div>
 
 <style>
     section > a {
@@ -25,4 +33,28 @@
         cursor: pointer;
 		text-decoration: none;
     }
+
+    @media (min-width: 640px) {
+		main {
+			max-width: none;
+		}
+		.footer {
+            padding: 1em;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			position: fixed;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			color: white;
+		}
+
+		.footer a {
+			vertical-align: middle;
+		}
+	}
+	.footer img {
+		width: 3em;
+	}
 </style>
