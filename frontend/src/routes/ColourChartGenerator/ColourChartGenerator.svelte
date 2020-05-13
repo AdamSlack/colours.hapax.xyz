@@ -39,7 +39,7 @@
 			pollingRate,
 			lineThickness,
 			selectFile,
-			drawStyle,
+            drawStyle: selectedDisplayStyle,
 			computedColours
 		})
     }
@@ -126,16 +126,6 @@
 		</fieldset>
 	</form>
 
-	<section>
-		<h2>Configuration</h2>
-		<p>{selectedFile || 'No file Selected'}</p>
-		<p>Width: {canvasWidth || 0} Height: {canvasHeight || 0}</p>
-		<p>Selected Colour Values: {colourValues || ''}</p>
-		<p>Line Thickness: {lineThickness || 0}</p>
-		<p>Polling Rate: {pollingRate || 0}</p>
-		<p>Display Style: {selectedDisplayStyle || 'No Style Selected'}</p>
-	</section>
-
     <div>
         <video id="video" controls="true" crossorigin="anonymous" style="display:none;"/>
     </div>
@@ -160,7 +150,7 @@
 	}
 
 	fieldset {
-		margin: 2em 0.5em;
+		margin: 3em 1em;
 		background-color: #eeeeee;
 		border: lightgray solid 1px;
 	}

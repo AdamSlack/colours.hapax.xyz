@@ -3,6 +3,7 @@
 </script>
 <section>
     <p>This site will let you generate colour charts from video files as well as browse charts produced by others.</p>
+    <p>Oh, and it doesn't really work on mobile, especially not iOS. I'd quite like to fix that at somepoint though.</p>
 </section>
 <section>
     <a href="/ColourChartGenerator" use:link>Create Colour Chart</a>
