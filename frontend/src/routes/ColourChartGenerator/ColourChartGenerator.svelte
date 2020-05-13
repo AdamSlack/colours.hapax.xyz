@@ -33,7 +33,15 @@
             selectedFile,
             drawStyle: selectedDisplayStyle,
 		})
-		console.log(computedColours)
+		console.log({
+			canvasHeight,
+			canvasWidth,
+			pollingRate,
+			lineThickness,
+			selectFile,
+			drawStyle,
+			computedColours
+		})
     }
 
     const matchScreenResolution = () => {
@@ -83,6 +91,11 @@
 
 		<fieldset>
 		<legend>Step 3: Configure Drawing Style 🎨</legend>
+		<p>
+			For more lines per second of video, increase the polling rate. For
+			thicker lines, increase the line thickness. Longer videos might
+			want a lower polling rate. Shorter videos might want a thinner line
+		</p>
 		<div>
 			<label>Line Thickness</label>
 			<input type="number" bind:value={lineThickness} />
