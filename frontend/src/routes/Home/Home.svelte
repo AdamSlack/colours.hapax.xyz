@@ -38,22 +38,21 @@
 		main {
 			max-width: none;
 		}
-		.footer {
-            padding: 1em;
-			display: flex;
-			justify-content: flex-start;
-			align-items: center;
+        .footer {
 			position: fixed;
 			left: 0;
 			bottom: 0;
 			width: 100%;
 			color: white;
 		}
-
-		.footer a {
-			vertical-align: middle;
-		}
-	}
+    }
+    
+    .footer {
+        padding: 1em;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
 	.footer img {
 		width: 3em;
 	}
