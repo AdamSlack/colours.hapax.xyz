@@ -11,6 +11,7 @@
     let colourValues
     let backgroundColour 
 	let selectedFile
+	let fileName
 	let computedColours
 
 	const selectColour = (rgba) => {
@@ -19,7 +20,8 @@
     }
 
     function selectFile (event) {
-        const file = this.files[0]
+		const file = this.files[0]
+		fileName = file.name
         selectedFile = URL.createObjectURL(file)
     }
 
@@ -38,7 +40,7 @@
 			canvasWidth,
 			pollingRate,
 			lineThickness,
-			selectFile,
+			fileName,
             drawStyle: selectedDisplayStyle,
 			computedColours
 		})
