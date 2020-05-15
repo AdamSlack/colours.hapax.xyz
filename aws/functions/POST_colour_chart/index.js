@@ -45,7 +45,8 @@ const storeColourChart = (colourChart) => {
 
 
 const handler = async (event, context) => {
-    if(!isValidColourChart(event)) {
+    const colourChart = JSON.parse(event.body)
+    if(!isValidColourChart(colourChart)) {
         return {
             statusCode: 400,
         }
@@ -54,10 +55,13 @@ const handler = async (event, context) => {
     await storeColourChart({
         colourChartId: context.awsRequestId,
         createdEpoch: Date.now(),
-        ...event
+        ...colourChart
     })
 
     const response = {
+        headers: {
+            "Access-Control-Allow-Origin": "*"
+        },
         statusCode: 200,
     };
     return response;

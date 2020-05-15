@@ -23,7 +23,6 @@
         .then(r => r.json())
         .then(data => {
             nextPage = data.colourCharts.LastEvaluatedKey
-            console.log('NEXT:',!!nextPage , nextPage)
             colourCharts = colourCharts.concat(data.colourCharts.Items)
         });
     }

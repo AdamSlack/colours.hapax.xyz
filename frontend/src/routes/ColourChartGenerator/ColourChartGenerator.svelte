@@ -55,7 +55,6 @@
 			computedColours
 		}
 
-		console.log(colourChart)
 		await saveColourChart(colourChart)
 
     }
