@@ -3,16 +3,28 @@
     import ColourChart from '../../Components/ColourChart/ColourChart.svelte'
     
     let colourCharts = []
-
+    let nextPage
 	let displayStyles = ["circle", "lines"]
     let selectedDisplayStyle = "circle"
 
-    onMount(async () => {
-        await fetch('https://api.film-colours.hapax.xyz/charts')
+
+    const fetchNextPage = async () => {
+        const url = new URL('https://api.film-colours.hapax.xyz/charts')
+        const params = new URLSearchParams({
+            LastEvaluatedKey: nextPage
+        })
+        url.search = params.toString()
+        await fetch(url)
         .then(r => r.json())
         .then(data => {
-            colourCharts = Array.from({ length: 2 }, () => data.colourCharts).flat();
+            nextPage = data.colourCharts.LastEvaluatedKey
+            console.log(nextPage)
+            colourCharts = colourCharts.concat(data.colourCharts.Items)
         });
+    }
+
+    onMount(async () => {
+        await fetchNextPage()
     })
 </script>
 
