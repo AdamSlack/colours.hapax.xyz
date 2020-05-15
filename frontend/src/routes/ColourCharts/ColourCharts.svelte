@@ -1,7 +1,9 @@
 <script>
     import { onMount } from "svelte"
+    import SvelteInfiniteScroll from "svelte-infinite-scroll";
+
     import ColourChart from '../../Components/ColourChart/ColourChart.svelte'
-    
+
     let colourCharts = []
     let nextPage
 	let displayStyles = ["circle", "lines"]
@@ -10,15 +12,18 @@
 
     const fetchNextPage = async () => {
         const url = new URL('https://api.film-colours.hapax.xyz/charts')
-        const params = new URLSearchParams({
-            LastEvaluatedKey: nextPage
-        })
-        url.search = params.toString()
+        if(nextPage) {
+            const params = new URLSearchParams({
+                colourChartId: nextPage.colourChartId,
+                createdEpoch: nextPage.createdEpoch,
+            })
+            url.search = params.toString()
+        }
         await fetch(url)
         .then(r => r.json())
         .then(data => {
             nextPage = data.colourCharts.LastEvaluatedKey
-            console.log(nextPage)
+            console.log('NEXT:',!!nextPage , nextPage)
             colourCharts = colourCharts.concat(data.colourCharts.Items)
         });
     }
@@ -52,7 +57,9 @@
                 <ColourChart colourChart={colourChart} displayStyle={selectedDisplayStyle}/>
             </div>
         {/each}
+        <SvelteInfiniteScroll window={true} on:loadMore={fetchNextPage} hasMore={!!nextPage} />
     </div>
+    
 </div>
 
 <style>

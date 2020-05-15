@@ -23,7 +23,17 @@
 		const file = this.files[0]
 		fileName = file.name
         selectedFile = URL.createObjectURL(file)
-    }
+	}
+	
+	const saveColourChart = (colourChart) => {
+		return fetch('https://api.film-colours.hapax.xyz/charts', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(colourChart)
+		})
+	}
 
     const beginProcessing = async () => {
         computedColours = await startProcessing({
@@ -35,7 +45,7 @@
             selectedFile,
             drawStyle: selectedDisplayStyle,
 		})
-		console.log({
+		const colourChart = {
 			canvasHeight,
 			canvasWidth,
 			pollingRate,
@@ -43,7 +53,11 @@
 			fileName,
             drawStyle: selectedDisplayStyle,
 			computedColours
-		})
+		}
+
+		console.log(colourChart)
+		await saveColourChart(colourChart)
+
     }
 
     const matchScreenResolution = () => {
