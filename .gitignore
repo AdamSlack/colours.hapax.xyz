@@ -1,4 +1,9 @@
 test_videos/
+.terraform/
+.DS_store/
+.DS_store
+lambda-build/
+files/
 
 # Logs
 logs

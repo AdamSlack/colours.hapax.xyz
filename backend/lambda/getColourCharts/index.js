@@ -1,7 +1,7 @@
 const { DocumentClient } = require('aws-sdk/clients/dynamodb')
 
 const db = new DocumentClient()
-const tableName = 'colourCharts'
+const tableName = process.env.COLOUR_CHART_TABLE_NAME
 
 const scanColourCharts = (LastEvaluatedKey) => {
     const params = {
