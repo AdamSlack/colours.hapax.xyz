@@ -33,8 +33,9 @@
 </script>
 
 <div>
-    <h2>🚧 In Progress 🚧</h2>
-    <p>Still messing about with this page, there might be something you care about here though.</p>
+    <h2>Recently Generated</h2>
+    <p>🚧 This page is still being fleshed out a little, you can see charts that have been made recently, but it's largely useless. 🚧</p>
+    <p>When i get round to it imma make it so you can click on one and pick a resolution for it. Then you can save it, print it out, make it a desktop background, or whatever floats your boat.</p>
     
     <h3>Display Type</h3>
     <div class="style-input">
@@ -49,7 +50,7 @@
     {/each}
     </div>
     
-    <h2>Previously Generated</h2>
+    <h2>Recently Generated</h2>
     <div class='chart-collection'>
         {#each colourCharts as colourChart }
             <div class='chart-container'>
