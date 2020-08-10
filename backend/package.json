@@ -1,14 +1,10 @@
 {
-  "name": "video-colour-slices",
+  "name": "colour-charts-backend",
   "version": "1.0.0",
-  "description": "Creates an image consisting of Lines or Rings with each being coloured as the average colour of a frame in a provided video",
-  "main": "index.html",
-  "directories": {
-    "example": "examples"
-  },
+  "description": "Backend lambda functions for the colours.hapax.xyz site",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "capture-screenshot": "node save-screenshot.js"
+    "build": "gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -22,6 +18,10 @@
   "homepage": "https://github.com/AdamSlack/video-colour-slices#readme",
   "dependencies": {},
   "devDependencies": {
-    "capture-website": "^0.8.1"
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-file": "^0.4.0",
+    "gulp-install": "^1.1.0",
+    "gulp-load-plugins": "^2.0.3"
   }
 }
