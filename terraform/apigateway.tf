@@ -8,6 +8,23 @@ resource "aws_api_gateway_domain_name" "colours_hapax" {
     certificate_arn = aws_acm_certificate_validation.api_cert.certificate_arn
 }
 
+resource "aws_api_gateway_domain_name" "www_colours_hapax" {
+    domain_name     = "www.api.colours.hapax.xyz"
+    certificate_arn = aws_acm_certificate_validation.api_cert.certificate_arn
+}
+
+resource "aws_api_gateway_base_path_mapping" "prod" {
+    api_id      = aws_api_gateway_rest_api.colours_hapax.id
+    stage_name  = aws_api_gateway_deployment.colours_hapax.stage_name
+    domain_name = aws_api_gateway_domain_name.colours_hapax.domain_name
+}
+
+resource "aws_api_gateway_base_path_mapping" "www_prod" {
+    api_id      = aws_api_gateway_rest_api.colours_hapax.id
+    stage_name  = aws_api_gateway_deployment.colours_hapax.stage_name
+    domain_name = aws_api_gateway_domain_name.www_colours_hapax.domain_name
+}
+
 resource "aws_api_gateway_resource" "charts" {
     path_part   = "charts"
     parent_id   = aws_api_gateway_rest_api.colours_hapax.root_resource_id
