@@ -26,7 +26,7 @@
 	}
 	
 	const saveColourChart = (colourChart) => {
-		return fetch('https://api.film-colours.hapax.xyz/charts', {
+		return fetch('https://api.colours.hapax.xyz/charts', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

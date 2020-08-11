@@ -11,7 +11,7 @@
 
 
     const fetchNextPage = async () => {
-        const url = new URL('https://api.film-colours.hapax.xyz/charts')
+        const url = new URL('https://api.colours.hapax.xyz/charts')
         if(nextPage) {
             const params = new URLSearchParams({
                 colourChartId: nextPage.colourChartId,
