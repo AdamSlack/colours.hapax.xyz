@@ -1,14 +1,31 @@
-resource "aws_apigatewayv2_api" "colours_hapax" {
-    name          = "colours.hapax.xyz"
-    protocol_type = "HTTP"
+resource "aws_api_gateway_rest_api" "colours_hapax" {
+    name            = "colours.hapax.xyz"
+    description     = "API for storing and retreiving Colour Chart data"
 }
 
-resource "aws_apigatewayv2_domain_name" "colours_hapax" {
-    domain_name = "api.colours.hapax.xyz"
+resource "aws_api_gateway_domain_name" "colours_hapax" {
+    domain_name     = "api.colours.hapax.xyz"
+    certificate_arn = aws_acm_certificate_validation.api_cert.certificate_arn
+}
 
-    domain_name_configuration {
-        certificate_arn = aws_acm_certificate.api_cert.arn
-        endpoint_type   = "REGIONAL"
-        security_policy = "TLS_1_2"
-    }
+resource "aws_api_gateway_resource" "charts" {
+    path_part   = "charts"
+    parent_id   = aws_api_gateway_rest_api.colours_hapax.root_resource_id
+    rest_api_id = aws_api_gateway_rest_api.colours_hapax.id
+}
+
+resource "aws_api_gateway_method" "get_charts" {
+    rest_api_id   = aws_api_gateway_rest_api.colours_hapax.id
+    resource_id   = aws_api_gateway_resource.charts.id
+    http_method   = "GET"
+    authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "integration" {
+    rest_api_id             = aws_api_gateway_rest_api.colours_hapax.id
+    resource_id             = aws_api_gateway_resource.charts.id
+    http_method             = aws_api_gateway_method.get_charts.http_method
+    integration_http_method = "POST"
+    type                    = "AWS_PROXY"
+    uri                     = aws_lambda_function.getColourCharts.invoke_arn
 }

@@ -19,6 +19,7 @@ resource "aws_acm_certificate_validation" "cert" {
 }
 
 resource "aws_acm_certificate" "api_cert" {
+    provider = aws.us-east-1
     domain_name       = "api.colours.hapax.xyz"
     validation_method = "DNS"
 
@@ -28,6 +29,7 @@ resource "aws_acm_certificate" "api_cert" {
 }
 
 resource "aws_acm_certificate_validation" "api_cert" {
+    provider = aws.us-east-1
     certificate_arn         = aws_acm_certificate.api_cert.arn
     validation_record_fqdns = [for record in aws_route53_record.api_cert_validation : record.fqdn]
 }

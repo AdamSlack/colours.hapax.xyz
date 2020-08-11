@@ -1,39 +1,68 @@
 resource "aws_iam_role" "getColourCharts" {
-    name = "getColourCharts"
+	name = "getColourCharts-role"
 
-    assume_role_policy = <<EOF
+	assume_role_policy = <<EOF
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-        "Action": "sts:AssumeRole",
-        "Principal": {
-            "Service": "lambda.amazonaws.com"
-        },
-        "Effect": "Allow",
-        "Sid": ""
-        }
-    ]
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Action": "sts:AssumeRole",
+			"Principal": {
+				"Service": "lambda.amazonaws.com"
+			},
+			"Effect": "Allow",
+			"Sid": ""
+		}
+	]
 }
 EOF
 }
 
-resource "aws_iam_role" "postColourChart" {
-    name = "postColourChart"
+resource "aws_iam_policy" "getColourCharts" {
+	name = "getColourCharts-policy"
 
-    assume_role_policy = <<EOF
+	policy = <<EOF
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-        "Action": "sts:AssumeRole",
-        "Principal": {
-            "Service": "lambda.amazonaws.com"
-        },
-        "Effect": "Allow",
-        "Sid": ""
-        }
-    ]
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"dynamodb:Scan"
+			],
+			"Resource": ["${aws_dynamodb_table.colourCharts.arn}"]
+		}
+	]
+}
+EOF
+}
+
+resource "aws_iam_policy_attachment" "getColourCharts" {
+	name = "getColourCharts-policy-attachement"
+
+	roles = [
+		aws_iam_role.getColourCharts.name,
+	]
+
+	policy_arn = aws_iam_policy.getColourCharts.arn
+}
+
+resource "aws_iam_role" "postColourChart" {
+	name = "postColourChart-role"
+
+	assume_role_policy = <<EOF
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Action": "sts:AssumeRole",
+			"Principal": {
+				"Service": "lambda.amazonaws.com"
+			},
+			"Effect": "Allow",
+			"Sid": ""
+		}
+	]
 }
 EOF
 }

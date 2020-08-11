@@ -18,7 +18,7 @@ resource "aws_lambda_function" "getColourCharts" {
 
     role                = aws_iam_role.getColourCharts.arn
 
-    handler             = "getColourCharts.handler"
+    handler             = "index.handler"
     runtime             = "nodejs12.x"
 
     environment {
@@ -36,7 +36,7 @@ resource "aws_lambda_function" "postColourChart" {
     
     role                = aws_iam_role.postColourChart.arn
 
-    handler             = "postColourChart.handler"
+    handler             = "index.handler"
     runtime             = "nodejs12.x"
 
     environment {
@@ -44,4 +44,14 @@ resource "aws_lambda_function" "postColourChart" {
             COLOUR_CHART_TABLE_NAME = aws_dynamodb_table.colourCharts.name
         }
     }
+}
+
+resource "aws_lambda_permission" "apigw_lambda" {
+    statement_id  = "AllowExecutionFromAPIGateway"
+    action        = "lambda:InvokeFunction"
+    function_name = aws_lambda_function.getColourCharts.function_name
+    principal     = "apigateway.amazonaws.com"
+
+    # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+    source_arn = "arn:aws:execute-api:eu-west-2:${var.aws_account}:${aws_api_gateway_rest_api.colours_hapax.id}/*/${aws_api_gateway_method.get_charts.http_method}${aws_api_gateway_resource.charts.path}"
 }
