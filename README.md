@@ -1,4 +1,7 @@
 # video-colour-slices
+
+[![Actions Status](https://github.com/adamslack/video-colours-slices/workflows/Pipeline/badge.svg)](https://github.com/adamslack/{video-colour-slices}/actions)
+
 Creates an image consisting of Lines or Rings with each being coloured as the average colour of a frame in a provided video
 
 You could make your own on [colours.hapax.xyz](http://colours.hapax.xyz)
