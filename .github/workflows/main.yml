@@ -8,7 +8,7 @@ on:
 
 jobs:
   CI:
-    name: 'Terraform'
+    name: 'Build & Deploy'
     runs-on: ubuntu-latest
 
     env:

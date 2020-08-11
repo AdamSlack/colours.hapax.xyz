@@ -1,11 +1,7 @@
 # video-colour-slices
 Creates an image consisting of Lines or Rings with each being coloured as the average colour of a frame in a provided video
 
-You could make your own on [film-colours.hapax.xyz](http://film-colours.hapax.xyz)
-
-## Current UI
-
-<img src="https://github.com/AdamSlack/video-colour-slices/blob/master/ui-screenshot.png?raw=true" width="500">
+You could make your own on [colours.hapax.xyz](http://colours.hapax.xyz)
 
 ## Examples
 
