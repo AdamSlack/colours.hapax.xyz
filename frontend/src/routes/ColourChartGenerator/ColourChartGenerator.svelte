@@ -26,13 +26,13 @@
 	}
 	
 	const saveColourChart = (colourChart) => {
-		// return fetch('https://api.film-colours.hapax.xyz/charts', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	body: JSON.stringify(colourChart)
-		// })
+		return fetch('https://api.film-colours.hapax.xyz/charts', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(colourChart)
+		})
 	}
 
     const beginProcessing = async () => {

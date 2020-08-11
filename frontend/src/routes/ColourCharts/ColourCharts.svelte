@@ -11,20 +11,20 @@
 
 
     const fetchNextPage = async () => {
-        // const url = new URL('https://api.film-colours.hapax.xyz/charts')
-        // if(nextPage) {
-        //     const params = new URLSearchParams({
-        //         colourChartId: nextPage.colourChartId,
-        //         createdEpoch: nextPage.createdEpoch,
-        //     })
-        //     url.search = params.toString()
-        // }
-        // await fetch(url)
-        // .then(r => r.json())
-        // .then(data => {
-        //     nextPage = data.colourCharts.LastEvaluatedKey
-        //     colourCharts = colourCharts.concat(data.colourCharts.Items)
-        // });
+        const url = new URL('https://api.film-colours.hapax.xyz/charts')
+        if(nextPage) {
+            const params = new URLSearchParams({
+                colourChartId: nextPage.colourChartId,
+                createdEpoch: nextPage.createdEpoch,
+            })
+            url.search = params.toString()
+        }
+        await fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            nextPage = data.colourCharts.LastEvaluatedKey
+            colourCharts = colourCharts.concat(data.colourCharts.Items)
+        });
     }
 
     onMount(async () => {
@@ -57,7 +57,7 @@
                 <ColourChart colourChart={colourChart} displayStyle={selectedDisplayStyle}/>
             </div>
         {/each}
-        <!-- <SvelteInfiniteScroll window={true} on:loadMore={fetchNextPage} hasMore={!!nextPage} /> -->
+        <SvelteInfiniteScroll window={true} on:loadMore={fetchNextPage} hasMore={!!nextPage} />
     </div>
     
 </div>
