@@ -66,3 +66,32 @@ resource "aws_iam_role" "postColourChart" {
 }
 EOF
 }
+
+resource "aws_iam_policy" "postColourChart" {
+	name = "postColourChart-policy"
+
+	policy = <<EOF
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"dynamodb:Scan"
+			],
+			"Resource": ["${aws_dynamodb_table.colourCharts.arn}"]
+		}
+	]
+}
+EOF
+}
+
+resource "aws_iam_policy_attachment" "postColourChart" {
+	name = "postColourChart-policy-attachement"
+
+	roles = [
+		aws_iam_role.postColourChart.name,
+	]
+
+	policy_arn = aws_iam_policy.postColourChart.arn
+}

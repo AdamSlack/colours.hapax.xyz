@@ -46,7 +46,7 @@ resource "aws_lambda_function" "postColourChart" {
     }
 }
 
-resource "aws_lambda_permission" "apigw_lambda" {
+resource "aws_lambda_permission" "getColourChart" {
     statement_id  = "AllowExecutionFromAPIGateway"
     action        = "lambda:InvokeFunction"
     function_name = aws_lambda_function.getColourCharts.function_name
@@ -55,3 +55,14 @@ resource "aws_lambda_permission" "apigw_lambda" {
     # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
     source_arn = "arn:aws:execute-api:eu-west-2:${var.aws_account}:${aws_api_gateway_rest_api.colours_hapax.id}/*/${aws_api_gateway_method.get_charts.http_method}${aws_api_gateway_resource.charts.path}"
 }
+
+resource "aws_lambda_permission" "postColourChart" {
+    statement_id  = "AllowExecutionFromAPIGateway"
+    action        = "lambda:InvokeFunction"
+    function_name = aws_lambda_function.postColourChart.function_name
+    principal     = "apigateway.amazonaws.com"
+
+    # More: http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html
+    source_arn = "arn:aws:execute-api:eu-west-2:${var.aws_account}:${aws_api_gateway_rest_api.colours_hapax.id}/*/${aws_api_gateway_method.post_chart.http_method}${aws_api_gateway_resource.charts.path}"
+}
+
