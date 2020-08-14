@@ -92,9 +92,8 @@ resource "aws_api_gateway_deployment" "colours_hapax" {
         redeployment = sha1(join(",", list(
             jsonencode(aws_api_gateway_integration.get_charts),
             jsonencode(aws_api_gateway_integration.post_chart),
-            jsonencode(aws_api_gateway_integration.post_chart),
         )))
-    
+    }    
 
 
     lifecycle {
