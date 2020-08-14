@@ -77,7 +77,7 @@ resource "aws_iam_policy" "postColourChart" {
 		{
 			"Effect": "Allow",
 			"Action": [
-				"dynamodb:Put"
+				"dynamodb:PutItem"
 			],
 			"Resource": ["${aws_dynamodb_table.colourCharts.arn}"]
 		}

@@ -45,7 +45,7 @@ const storeColourChart = (colourChart) => {
 
 
 const handler = async (event, context) => {
-    const colourChart = JSON.parse(event.body)
+    const colourChart = event
     if(!isValidColourChart(colourChart)) {
         return {
             statusCode: 400,
