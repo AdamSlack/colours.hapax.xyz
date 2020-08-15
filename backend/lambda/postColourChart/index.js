@@ -27,7 +27,7 @@ const isValidColourChart = (colourChart) => {
         typeof colourChart.lineThickness  === 'number',
         typeof colourChart.fileName  === 'string',
         typeof colourChart.drawStyle  === 'string',
-        typeof colourChart.displayNames  === 'string',
+        typeof colourChart.displayName  === 'string',
         typeof colourChart.computedColours  === 'object' && colourChart.computedColours.every((colour) => {
             return typeof colour.r === 'number'
             && typeof colour.g === 'number'
