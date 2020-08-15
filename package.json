@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "svelte-scrollto": "^0.2.0"
+  }
+}

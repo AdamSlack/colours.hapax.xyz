@@ -1,7 +1,8 @@
 <script>
-    import { HsvPicker } from "svelte-color-picker";
+    import { HsvPicker } from "svelte-color-picker"
     import { startProcessing } from './ColourChartGenerator'
-
+	import * as animateScroll from "svelte-scrollto"
+	 
 	let canvasHeight = 800
 	let canvasWidth = 600
 	let lineThickness = 12
@@ -12,16 +13,22 @@
     let backgroundColour 
 	let selectedFile
 	let fileName
+	let displayName
 	let computedColours
+	let colourChartData = {}
+
+	let isProcessing = false
+	let completedProcessing = false
 
 	const selectColour = (rgba) => {
-        colourValues = JSON.stringify(rgba.detail, null, 2);
+        colourValues = JSON.stringify(rgba.detail, null, 2)
         backgroundColour = rgba.detail
     }
 
     function selectFile (event) {
 		const file = this.files[0]
 		fileName = file.name
+		displayName = fileName
         selectedFile = URL.createObjectURL(file)
 	}
 	
@@ -36,6 +43,9 @@
 	}
 
     const beginProcessing = async () => {
+		
+		isProcessing = true
+		animateScroll.scrollToBottom()
         computedColours = await startProcessing({
             canvasHeight,
             canvasWidth,
@@ -45,7 +55,8 @@
             selectedFile,
             drawStyle: selectedDisplayStyle,
 		})
-		const colourChart = {
+		colourChartData = {
+			...colourChartData,
 			canvasHeight,
 			canvasWidth,
 			pollingRate,
@@ -55,8 +66,8 @@
 			computedColours
 		}
 
-		await saveColourChart(colourChart)
-
+		completedProcessing = true
+		animateScroll.scrollToBottom()
     }
 
     const matchScreenResolution = () => {
@@ -64,7 +75,10 @@
         const resHeight = window.screen.height * window.devicePixelRatio
         canvasWidth = resWidth
         canvasHeight = resHeight
-    }
+	}
+	
+	$: colourChartData = {...colourChartData, displayName}
+	$: console.log(colourChartData)
     
 
 </script>
@@ -82,76 +96,89 @@
 	<fieldset>
 		<legend>Step 2: Configure Your Canvas 🖼</legend>
 
-		<p>
-			You could set the values of the canvas height and canvas width to match
-			your device - press the 'Match Screen Resolution' button to
-			automatically do that. The background colour will be visible if you have
-			spaces between drawn lines.
-		</p>
-		<div>
-			<label>Canvas Height (px)</label>
-			<input type="number" bind:value={canvasHeight} />
+			<p>
+				You could set the values of the canvas height and canvas width to match
+				your device - press the 'Match Screen Resolution' button to
+				automatically do that. The background colour will be visible if you have
+				spaces between drawn lines.
+			</p>
+			<div>
+				<label>Canvas Height (px)</label>
+				<input type="number" bind:value={canvasHeight} />
 
-			<label>Canvas width (px)</label>
-			<input type="number" bind:value={canvasWidth} />
+				<label>Canvas width (px)</label>
+				<input type="number" bind:value={canvasWidth} />
 
-			<button type="button" on:click={matchScreenResolution}>Match Screen Resolution</button>
-			<label>Background Colour</label>
-			<div class="HsvPicker">
-			<HsvPicker on:colorChange={selectColour} startColor={'#000000'} />
+				<button type="button" on:click={matchScreenResolution}>Match Screen Resolution</button>
+				<label>Background Colour</label>
+				<div class="HsvPicker">
+				<HsvPicker on:colorChange={selectColour} startColor={'#000000'} />
+				</div>
+
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>Step 3: Configure Drawing Style 🎨</legend>
+			<p>
+				For more lines per second of video, increase the polling rate. For
+				thicker lines, increase the line thickness. Longer videos might
+				want a lower polling rate. Shorter videos might want a thinner line
+			</p>
+			<div>
+				<label>Line Thickness</label>
+				<input type="number" bind:value={lineThickness} />
+
+				<label>Polling Rate</label>
+				<input type="number" bind:value={pollingRate} />
+
+				<label>Display Type</label>
+				{#each displayStyles as displayStyle}
+				<label>
+					<input
+					type="radio"
+					bind:group={selectedDisplayStyle}
+					value={displayStyle} />
+					{displayStyle}
+				</label>
+				{/each}
+
 			</div>
 
-		</div>
 		</fieldset>
 
 		<fieldset>
-		<legend>Step 3: Configure Drawing Style 🎨</legend>
-		<p>
-			For more lines per second of video, increase the polling rate. For
-			thicker lines, increase the line thickness. Longer videos might
-			want a lower polling rate. Shorter videos might want a thinner line
-		</p>
-		<div>
-			<label>Line Thickness</label>
-			<input type="number" bind:value={lineThickness} />
+			<legend>Step 4: Start Processing ⚙️</legend>
+			<div>
+				<button type="submit">Start Processing</button>
+			</div>
+		</fieldset>
+		
+		<fieldset hidden={!isProcessing} id="canvas-fieldset">
+			<legend>Step 5: Right-click ➡ Save Image As! 😄</legend>
+			<div>
+				<video id="video" controls="true" crossorigin="anonymous" style="display:none;"/>
+			</div>
+			
+			<div>
+				<canvas id="frame-canvas" width="160" height="96" style="display:none;"></canvas>
+			</div>
 
-			<label>Polling Rate</label>
-			<input type="number" bind:value={pollingRate} />
-
-			<label>Display Type</label>
-			{#each displayStyles as displayStyle}
-			<label>
-				<input
-				type="radio"
-				bind:group={selectedDisplayStyle}
-				value={displayStyle} />
-				{displayStyle}
-			</label>
-			{/each}
-
-		</div>
-
+			<div>
+				<canvas id="film-colours-canvas" width="600" height="800" style="display:none;" download={displayName}></canvas>
+			</div>
 		</fieldset>
 
-		<fieldset>
-		<legend>Step 4: Start Processing ⚙️</legend>
-		<div>
-			<button type="submit">Start Processing</button>
-		</div>
+		<fieldset hidden={!completedProcessing} id="upload-fieldset">
+			<legend>Step 6: Upload for others! (optional) 🌤</legend>
+				<p>Enter a display name, and click upload to add this to the collection for all to view!</p>
+				<div>
+					<label>Display Name</label>
+					<input type="text" name="displayName" bind:value={displayName}>
+					<button type="button" on:click={saveColourChart(colourChartData)}>Upload</button>
+				</div>
 		</fieldset>
 	</form>
-
-    <div>
-        <video id="video" controls="true" crossorigin="anonymous" style="display:none;"/>
-    </div>
-
-    <div>
-        <canvas id="frame-canvas" width="160" height="96" style="display:none;"></canvas>
-    </div>
-
-    <div>
-        <canvas id="film-colours-canvas" width="600" height="800" style="display:none;"></canvas>
-    </div>
 
 
 <style>
