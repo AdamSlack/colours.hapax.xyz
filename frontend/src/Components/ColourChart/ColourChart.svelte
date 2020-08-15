@@ -60,7 +60,7 @@
 
 <div class="colour-chart">
     <canvas bind:this={canvas} height="500" width="300"></canvas>
-    <h3>{colourChart.fileName}</h3>
+    <h3>{colourChart.displayName || colourChart.fileName}</h3>
 </div>
 
 
